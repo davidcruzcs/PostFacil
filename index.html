@@ -13,26 +13,11 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<script src="assets/js/meli.js"></script>
 	</head>
 	<body>
 
-		<script>
-		  window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '324670351204659',
-		      xfbml      : true,
-		      version    : 'v2.7'
-		    });
-		  };
 
-		  (function(d, s, id){
-		     var js, fjs = d.getElementsByTagName(s)[0];
-		     if (d.getElementById(id)) {return;}
-		     js = d.createElement(s); js.id = id;
-		     js.src = "//connect.facebook.net/en_US/sdk.js";
-		     fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
-		</script>
 
 		<!-- Header -->
 			<header id="header">
@@ -42,10 +27,13 @@
 			</header>
 
 		<!-- Signup Form -->
-			<form id="signup-form" method="post" action="#">
-				<input type="email" name="email" id="email" placeholder="Email Address" />
-				<input type="submit" value="Sign Up" />
+			<form >
+				<input type="text" name="email" id="email" placeholder="Escribe una URL" />
+				<input type="submit" value="Preview" onclick="call();return false;" />
 			</form>
+			<p id="demo"></p>
+
+
 
 		<!-- Footer -->
 			<footer id="footer">
@@ -70,6 +58,24 @@
 			  data-width="450"
 			  data-show-faces="true">
 			</div>
+
+			<script>
+				window.fbAsyncInit = function() {
+					FB.init({
+						appId      : '324670351204659',
+						xfbml      : true,
+						version    : 'v2.7'
+					});
+				};
+
+				(function(d, s, id){
+					 var js, fjs = d.getElementsByTagName(s)[0];
+					 if (d.getElementById(id)) {return;}
+					 js = d.createElement(s); js.id = id;
+					 js.src = "https://connect.facebook.net/en_US/sdk.js";
+					 fjs.parentNode.insertBefore(js, fjs);
+				 }(document, 'script', 'facebook-jssdk'));
+			</script>
 
 	</body>
 </html>
