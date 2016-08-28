@@ -1,24 +1,27 @@
+
+//---------------------------variables------------------------------------------
+
 var nUrls = 0;
 
+//---------------------------funciones------------------------------------------
 function call() {
   var x = new Array(nUrls);
-  for(var i = 0; i <= nUrls ; i++){
-    x.push("url"+i);
-  }
+  for(var i = 0; i <= nUrls ; i++){ x.push("url"+i); }
+  //creo una funcion asincronica por cada elemento del array para no perder
+  // el scope de la variable que guarda la url
   x.forEach(function(object, i){
-
-    console.log(i + " " + nUrls);
     var url = document.getElementById(object).value;
     var reqURL = processURL(url);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
+        // --------    200 OK   -------
         var salida = JSON.parse(xhttp.responseText);
-        var est = salida.condition == "new" ? "nuevo" : "usado";
+        var estadoProd = salida.condition == "new" ? "nuevo" : "usado";
         var newHTML = "<center><h1>" + salida.title + "</h1><center>";
         newHTML += "<span>precio: "+ salida.currency_id + " " + salida.price + "</span><br>";
-        newHTML += "<span>estado: "+ est + "</span><br>";
-        newHTML += "<span><a href='"+salida.permalink+"'> link mercadolibre </a></span><br>";
+        newHTML += "<span>estado: "+ estadoProd + "</span><br>";
+        newHTML += "<span><a href='"+salida.permalink+"'> Mercadolibre </a></span><br>";
         newHTML += "<img src='"+salida.thumbnail+"'><br>";
         var images = salida.pictures;
         for(var i=0; i < images.length; i++){
@@ -26,15 +29,12 @@ function call() {
           var url = image.url;
           newHTML += "<img src='"+url+"'>";
         }
-
         getDescription(reqURL+"/descriptions", newHTML);
-
       }
     };
     xhttp.open("GET", reqURL, true);
     xhttp.send();
   });
-
 }
 
 function getDescription(reqURL, post) {
@@ -44,7 +44,7 @@ function getDescription(reqURL, post) {
       var salida = JSON.parse(xhttp.responseText)[0];
       var newHTML = salida.text;
       newHTML = post + newHTML;
-      document.getElementById("demo").innerHTML = document.getElementById("demo").innerHTML + newHTML;
+      $("#previewSection").append(newHTML);
     }
   }
   xhttp.open("GET", reqURL, true);
@@ -54,16 +54,14 @@ function getDescription(reqURL, post) {
 
 function processURL (url){
   var subUrl = url.split("mercadolibre.com.co/")[1].split("-");
-  var resturl;
-  resturl = "" +  subUrl[0] + "" + subUrl[1];
-  return "https://api.mercadolibre.com/items/" + resturl;
-
+  var mlObjId = "" +  subUrl[0] + "" + subUrl[1];
+  return "https://api.mercadolibre.com/items/" + mlObjId;
 }
 
 function addOption(){
   ++nUrls;
-  $("#urlsHolder").append("<input type='text' name='email' id='url"+nUrls+"' placeholder='Escribe una URL' />");
-//  document.getElementById("urlsHolder").innerHTML = document.getElementById("urlsHolder").innerHTML + "<input type='text' name='email' id='url"+nUrls+"' placeholder='Escribe una URL' /> ";
+  var newInput = "<br><input type='text' name='email' id='url"+nUrls+"' placeholder='Escribe una URL' /> ";
+  $("#urlsHolder").append(newInput);
 }
 
 

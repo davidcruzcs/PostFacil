@@ -4,10 +4,28 @@
 	<title>PostFacil.com</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-
+	<!-- jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/facebook.js"></script>
+	<script src="js/meli.js"></script>
 </head>
 <body>
 
+	<header></header>
+	
+	<div id='inputSection' >
+		<div id='urlsHolder'>
+			<input type="text" name="email" id="url0" placeholder="Escribe una URL" />
+		</div>
+		<input type="submit" style='background-color:grey' value="Agregar otro" onclick="addOption();return false;" />
+		<input type="submit" value="Vista previa" onclick="call();return false;" />
+	</div>
+
+	<div id='previewSection'></div>
+
+	<div id='fbSection'></div>
+
+	<footer></footer>
 
 	<script>
 	window.fbAsyncInit = function() {
@@ -16,11 +34,6 @@
 			xfbml      : true,
 			version    : 'v2.7'
 		});
-
-		FB.getLoginStatus(function(response) {
-		    statusChangeCallback(response);
-		});
-
 	};
 
 	(function(d, s, id){
@@ -31,61 +44,55 @@
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 
-
+	FB.getLoginStatus(function(response) {
+		statusChangeCallback(response);
+	});
 	function checkLoginState() {
-	  FB.getLoginStatus(function(response) {
-	    statusChangeCallback(response);
-	  });
+		FB.getLoginStatus(function(response) {
+			statusChangeCallback(response);
+		});
 	}
 
 	function statusChangeCallback(response) {
-	    console.log('statusChangeCallback');
-	    console.log(response);
-	    // The response object is returned with a status field that lets the
-	    // app know the current login status of the person.
-	    // Full docs on the response object can be found in the documentation
-	    // for FB.getLoginStatus().
-	    if (response.status === 'connected') {
-	      // Logged into your app and Facebook.
-	      testAPI();
+		console.log('statusChangeCallback');
+		console.log(response);
+		// The response object is returned with a status field that lets the
+		// app know the current login status of the person.
+		// Full docs on the response object can be found in the documentation
+		// for FB.getLoginStatus().
+		if (response.status === 'connected') {
+			// Logged into your app and Facebook.
+			testAPI();
 
-	    } else if (response.status === 'not_authorized') {
-	      // The person is logged into Facebook, but not your app.
-	      document.getElementById('status').innerHTML = 'Please log ' +
-	        'into this app.';
-	    } else {
-	      // The person is not logged into Facebook, so we're not sure if
-	      // they are logged into this app or not.
-	      document.getElementById('status').innerHTML = 'Please log ' +
-	        'into Facebook.';
-	    }
-	  }
+		} else if (response.status === 'not_authorized') {
+			// The person is logged into Facebook, but not your app.
+			document.getElementById('status').innerHTML = 'Please log ' +
+			'into this app.';
+		} else {
+			// The person is not logged into Facebook, so we're not sure if
+			// they are logged into this app or not.
+			document.getElementById('status').innerHTML = 'Please log ' +
+			'into Facebook.';
+		}
+	}
 
-	  function testAPI() {
+	function testAPI() {
+		console.log('Welcome!  Fetching your information.... ');
+		FB.api('/me', function(response) {
+			console.log('Successful login for: ' + response.name);
+			document.getElementById('status').innerHTML =
+			'Thanks for logging in, ' + response.name + '!';
+		});
+	}
 
-
-
-	      console.log('Welcome!  Fetching your information.... ');
-	      FB.api('/me', function(response) {
-	        console.log('Successful login for: ' + response.name);
-	        document.getElementById('status').innerHTML =
-	          'Thanks for logging in, ' + response.name + '!';
-	      });
-			}
 
 	</script>
 
-	<fb:login-button scope="public_profile,email,manage_pages" onlogin="checkLoginState();">
-	</fb:login-button>
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
 
-	<div id="status">
+<div id="status">
 </div>
-
-	<form >
-		<input type="text" name="url" id="url" placeholder="Escribe una URL" />
-		<input type="submit" value="Preview" onclick="call();return false;" />
-	</form>
-	<p id="demo"></p>
 
 </body>
 </html>
